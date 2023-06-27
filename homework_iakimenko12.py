@@ -91,11 +91,18 @@ print(Point(0, 0) in line)
 
 class Triangle:
     def __init__(self, point1, point2, point3):
+        self._index = None
         self._points = []
         for point in [point1, point2, point3]:
             if not isinstance(point, Point):
                 raise TypeError("Triangle points must be instances of the Point class.")
             self._points.append(point)
+        self._index = 0
+
+        triangle = Triangle(p1, p2, Point(5, 9))
+        for point in triangle:
+            print(point)
+        print(triangle.area())
 
     def __str__(self):
         return f'Triangle [{self._points[0]}], [{self._points[1]}], [{self._points[2]}]'
@@ -103,6 +110,16 @@ class Triangle:
     @property
     def points(self):
         return iter(self._points)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._index >= len(self._points):
+            raise StopIteration
+        point = self._points[self._index]
+        self._index += 1
+        return point
 
     def area(self):
         # Lengths of sides of the triangle
